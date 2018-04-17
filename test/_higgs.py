@@ -21,8 +21,8 @@ process.GlobalTag.globaltag = '80X_mcRun2_asymptotic_2016_miniAODv2_v1' # for MC
 process.MessageLogger.cerr.FwkReport.reportEvery = 1000 # default 1000
 
 from SUSYBSMAnalysis.Zprime2muAnalysis.hltTriggerMatch_cfi import trigger_match, prescaled_trigger_match, trigger_paths, prescaled_trigger_paths, overall_prescale, offline_pt_threshold, prescaled_offline_pt_threshold
-#from SUSYBSMAnalysis.Zprime2muAnalysis.Zprime2muAnalysis_cff import electrons_miniAOD
-#electrons_miniAOD(process)
+from SUSYBSMAnalysis.Zprime2muAnalysis.Zprime2muAnalysis_cff import electrons_miniAOD
+electrons_miniAOD(process)
 
 import SUSYBSMAnalysis.Zprime2muAnalysis.OurSelectionNew_cff as OurSelectionNew
 import SUSYBSMAnalysis.Zprime2muAnalysis.OurSelectionDec2012_cff as OurSelectionDec2012
@@ -42,10 +42,9 @@ Selection = OurSelectionDec2012
 
 # Keep track of modules to put in the path for this set of cuts.
 path_list = []
-#path_list.append(process.egmGsfElectronIDSequence)
+path_list.append(process.egmGsfElectronIDSequence)
 	    
 leptons_name = cut_name + 'Leptons'
-#    if cut_name == 'Simple':
 muon_cuts = ''
 leptons = process.leptonsMini.clone(muon_cuts = muon_cuts)
     
@@ -83,7 +82,6 @@ for dil_name, dil_decay, dil_cut in dils:
     setattr(process, allname, alldil)
     setattr(process, name, dil)
     path_list.append(alldil * dil)
-
 
        #define the list of MC samples to be read here. be careful that if WWinclusive or tautau sample are not commented it will apply the filters when running locally.
 
@@ -131,12 +129,6 @@ def printify(process):
     pe = process.PrintEventSimple = cms.EDAnalyzer('PrintEvent', dilepton_src = cms.InputTag('SimpleMuonsPlusMuonsMinus'))
     if hasattr(process, 'pathSimple'):
         process.pathSimple *= process.PrintEventSimple
-
-    #- 2011-2012 selection (Nlayers > 8)
-    #process.PrintEventOurNew = pe.clone(dilepton_src = cms.InputTag('OurNewMuonsPlusMuonsMinus'))
-    #process.PrintEventOurNewSS = pe.clone(dilepton_src = cms.InputTag('OurNewMuonsSameSign'))
-    #process.PrintEventOurNewEmu = pe.clone(dilepton_src = cms.InputTag('OurNewMuonsElectronsOppSign'))
-    #process.pathOurNew *= process.PrintEventOurNew * process.PrintEventOurNewSS * process.PrintEventOurNewEmu
 
     #- December 2012 selection (Nlayers > 5, re-tuned TuneP, dpT/pT < 0.3)
     if hasattr(process, 'pathOur2012'):
@@ -199,10 +191,6 @@ if 'gogo' in sys.argv:
     process.source.fileNames = [filename]
     from SUSYBSMAnalysis.Zprime2muAnalysis.cmsswtools import set_events_to_process
     set_events_to_process(process, [(run, event)])
-
-#f = file('outfile_histos1', 'w')
-#f.write(process.dumpPython())
-#f.close()
 
 if __name__ == '__main__' and 'submit' in sys.argv:
     crab_cfg = '''
