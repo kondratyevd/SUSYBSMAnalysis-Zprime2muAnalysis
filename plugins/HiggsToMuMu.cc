@@ -315,8 +315,8 @@ void HiggsToMuMu::analyze(const edm::Event& event, const edm::EventSetup&) {
    bool jet1_flag = (((fabs(itJet->eta())<=2.7)&&(flag1))||
                 ((fabs(itJet->eta())>2.7)&&(fabs(itJet->eta())<=3.0)&&(flag2))||
                 ((fabs(itJet->eta())>3.0)&&(fabs(itJet->eta())<4.7)&&(flag3)));
- 
-      if (jet1_flag){
+   bool jet1_cuts = ((fabs(itJet->eta()) < 4.7) && (itJet->pt() > 10) && (deltaR((*itJet),dil.daughter(0)->p4()) > 0.4) && (deltaR((*itJet),dil.daughter(1)->p4()) > 0.4);
+      if (jet1_flag&&jet1_cuts){
 
         TLorentzVector jet0, jet1;
 
@@ -380,8 +380,9 @@ void HiggsToMuMu::analyze(const edm::Event& event, const edm::EventSetup&) {
            bool jet2_flag = (((fabs(secondJet->eta())<=2.7)&&(flag1_2))||
                 ((fabs(secondJet->eta())>2.7)&&(fabs(secondJet->eta())<=3.0)&&(flag2_2))||
                 ((fabs(secondJet->eta())>3.0)&&(fabs(secondJet->eta())<4.7)&&(flag3_2)));
+           bool jet2_cuts = ((fabs(secondJet->eta()) < 4.7) && (secondJet->pt() > 10) && (deltaR((*secondJet),dil.daughter(0)->p4()) > 0.4) && (deltaR((*secondJet),dil.daughter(1)->p4()) > 0.4);
 
-           if (jet2_flag){
+           if (jet2_flag&&jet2_cuts){
         bool sameJet= ((fabs(itJet->pt()-secondJet->pt())<0.01)&&(fabs(itJet->eta()-secondJet->eta())<0.01)&&(fabs(itJet->phi()-secondJet->phi())<0.01));
         float dijet_mass = (itJet->p4()+secondJet->p4()).M();
         if(!sameJet){
