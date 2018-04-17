@@ -56,7 +56,9 @@ private:
     int nJets;
     int nJets_lt_2p4;
     int nJets_gt_2p4; 
-///Two higest pt jets
+
+///Four higest pt jets
+
     float jet1_pt, jet1_energy, jet1_eta, jet1_phi, jet1_btag;
     float jet2_pt, jet2_energy, jet2_eta, jet2_phi, jet2_btag;
     float jet3_pt, jet3_energy, jet3_eta, jet3_phi, jet3_btag;
@@ -67,6 +69,7 @@ private:
     float j1j2_mass;
 
 ///Two higest mass dijet pairs
+
     float jj1_mass;
     float jj1_dEta;
     float jj2_mass;
@@ -330,7 +333,6 @@ void HiggsToMuMu::analyze(const edm::Event& event, const edm::EventSetup&) {
         t.jet1_dz = fabs(zz1);
         t.jet1_dr = sqrt(xx1*xx1+yy1*yy1);
         jet0.SetPtEtaPhiE(itJet->pt(), itJet->eta(), itJet->phi(), itJet->energy());
-        // jet0 = itJet->p4();
       }
       if (iterator == 1) {
         t.jet2_pt = itJet->pt();
@@ -344,7 +346,6 @@ void HiggsToMuMu::analyze(const edm::Event& event, const edm::EventSetup&) {
         t.jet2_dpv = sqrt(xx2*xx2+yy2*yy2+zz2*zz2);
         t.jet2_dz = fabs(zz2);
         t.jet2_dr = sqrt(xx2*xx2+yy2*yy2);
-        // jet1 = itJet->p4();
         jet1.SetPtEtaPhiE(itJet->pt(), itJet->eta(), itJet->phi(), itJet->energy());
         t.j1j2_mass = (jet0+jet1).M();
       }
@@ -415,7 +416,7 @@ void HiggsToMuMu::analyze(const edm::Event& event, const edm::EventSetup&) {
  
    }
   }
-    //
+  
   t.nJets = nJets;
   t.nJets_lt_2p4 = nJets_lt_2p4;
   t.nJets_gt_2p4 = nJets_gt_2p4;
