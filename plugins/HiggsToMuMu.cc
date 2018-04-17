@@ -34,7 +34,6 @@ private:
     unsigned run;
     unsigned lumi;
     unsigned event;
-    float genWeight;
     int nvertices;
 
     float mu1_pt, mu1_eta, mu1_phi;
@@ -44,13 +43,13 @@ private:
     float mu1_dz, mu2_dz;
     float mu1_dr, mu2_dr;
 
-    float dil_mass;
-    float dil_pt;
-    float dil_eta;
-    float dil_phi;
-    float dil_dR;
-    float dil_dPhi;
-    float dil_dEta;
+    float dimu_mass;
+    float dimu_pt;
+    float dimu_eta;
+    float dimu_phi;
+    float dimu_dR;
+    float dimu_dPhi;
+    float dimu_dEta;
 
     float met_pt;
     float met_phi;
@@ -84,12 +83,7 @@ private:
   const edm::InputTag met_src;
   const edm::InputTag jet_src;
   const edm::InputTag vertices_src;
-  //  const bool fill_gen_info;
-  const edm::InputTag TriggerResults_src;
-  const edm::InputTag genEventInfo_;
   std::vector<edm::InputTag> filterTags;
-  //  HardInteraction* hardInteraction;
-  //const edm::InputTag TriggerResults_src; 
 };
 
 TString HiggsToMuMu::replace_all(const TString& a, const TString& b, const TString& c) {
@@ -100,23 +94,15 @@ TString HiggsToMuMu::replace_all(const TString& a, const TString& b, const TStri
 
 HiggsToMuMu::HiggsToMuMu(const edm::ParameterSet& cfg)
   : dimu_src(cfg.getParameter<edm::InputTag>("dimu_src")),
-    beamspot_src(cfg.getParameter<edm::InputTag>("beamspot_src")),
     met_src(cfg.getParameter<edm::InputTag>("met_src")),
     jet_src(cfg.getParameter<edm::InputTag>("jet_src")),
-    vertices_src(cfg.getParameter<edm::InputTag>("vertices_src")),
-    TriggerResults_src(cfg.getParameter<edm::InputTag>("TriggerResults_src")),
-    genEventInfo_(cfg.getUntrackedParameter<edm::InputTag>("genEventInfo")),
-    filterTags(cfg.getParameter<std::vector<edm::InputTag> > ("metFilter"))
-
+    vertices_src(cfg.getParameter<edm::InputTag>("vertices_src"))
 {
  
   consumes<pat::CompositeCandidateCollection>(dimu_src);
   consumes<std::vector<pat::MET>>(met_src);
   consumes<std::vector<pat::Jet>>(jet_src);
-  consumes<reco::BeamSpot>(beamspot_src);
   consumes<reco::VertexCollection>(vertices_src);
-  consumes<edm::TriggerResults>(TriggerResults_src);
-  consumes<GenEventInfoProduct>(genEventInfo_);
  
   edm::Service<TFileService> fs;
   tree = fs->make<TTree>("t", "");
@@ -140,13 +126,13 @@ HiggsToMuMu::HiggsToMuMu(const edm::ParameterSet& cfg)
   tree->Branch("mu1_dr", &t.mu1_dr, "mu1_dr/F");
   tree->Branch("mu2_dr", &t.mu2_dr, "mu2_dr/F");
 
-  tree->Branch("dil_mass", &t.dil_mass, "dil_mass/F");
-  tree->Branch("dil_pt", &t.dil_pt, "dil_pt/F");
-  tree->Branch("dil_eta", &t.dil_eta, "dil_eta/F");
-  tree->Branch("dil_phi", &t.dil_phi, "dil_phi/F");
-  tree->Branch("dil_dR", &t.dil_dR, "dil_dR/F");
-  tree->Branch("dil_dPhi", &t.dil_dPhi, "dil_dPhi/F");
-  tree->Branch("dil_dEta", &t.dil_dEta, "dil_dEta/F");
+  tree->Branch("dimu_mass", &t.dimu_mass, "dimu_mass/F");
+  tree->Branch("dimu_pt", &t.dimu_pt, "dimu_pt/F");
+  tree->Branch("dimu_eta", &t.dimu_eta, "dimu_eta/F");
+  tree->Branch("dimu_phi", &t.dimu_phi, "dimu_phi/F");
+  tree->Branch("dimu_dR", &t.dimu_dR, "dimu_dR/F");
+  tree->Branch("dimu_dPhi", &t.dimu_dPhi, "dimu_dPhi/F");
+  tree->Branch("dimu_dEta", &t.dimu_dEta, "dimu_dEta/F");
 
   tree->Branch("met_pt", &t.met_pt, "met_pt/F");
   tree->Branch("met_phi", &t.met_phi, "met_phi/F");
@@ -195,15 +181,6 @@ HiggsToMuMu::HiggsToMuMu(const edm::ParameterSet& cfg)
   tree->Branch("nJets_CSV", &t.nJets_CSV, "nJets_CSV/I");
 }
 
-template <typename T>
-float userFloat(const T& patobj, const char* name, float def=-999.) {
-  return patobj.hasUserFloat(name) ? patobj.userFloat(name) : def;
-}
-
-template <typename T>
-int userInt(const T& patobj, const char* name, int def=-999) {
-  return patobj.hasUserInt(name) ? patobj.userInt(name) : def;
-}
 
 void HiggsToMuMu::analyze(const edm::Event& event, const edm::EventSetup&) {
   memset(&t, 0, sizeof(tree_t));
@@ -214,24 +191,6 @@ void HiggsToMuMu::analyze(const edm::Event& event, const edm::EventSetup&) {
   t.run = event.id().run();
   t.lumi = event.luminosityBlock();
   t.event = event.id().event();
-
-  // Get Trigger information
-
-  edm::Handle<edm::TriggerResults> respat;
-  event.getByLabel(TriggerResults_src, respat);
-  
-  const edm::TriggerNames& namespat = event.triggerNames(*respat);
- 
-
-  if (namespat.triggerIndex("Flag_goodVertices") < respat->size()) {
-   
-    bool metFilterAccept = true;
-    for ( std::vector<edm::InputTag>::iterator filterTag_i = filterTags.begin(); filterTag_i != filterTags.end(); ++filterTag_i ) {
-      std::string filterTag = (*filterTag_i).label(); 
-      metFilterAccept  *= respat->accept(namespat.triggerIndex(filterTag)); 
-    }
-  }
-
 
   // Get Vertex information
   edm::Handle<reco::VertexCollection> pvs;
@@ -251,7 +210,7 @@ void HiggsToMuMu::analyze(const edm::Event& event, const edm::EventSetup&) {
   edm::Handle<pat::CompositeCandidateCollection> dils;
   event.getByLabel(dimu_src, dils);
 
-  bool dil_flag = dils->size() > 0;
+  bool dimu_flag = dils->size() > 0;
   pat::CompositeCandidate dil = (*dils)[0];
   
   // The dils come pre-sorted so that the first in the list is the one to use
@@ -277,25 +236,19 @@ void HiggsToMuMu::analyze(const edm::Event& event, const edm::EventSetup&) {
   t.mu2_dz = fabs(zz2);
   t.mu2_dr = sqrt(xx2*xx2+yy2*yy2);
 
-  t.dil_mass = dil.mass();
-  t.dil_pt = dil.pt();
-  t.dil_eta = dil.eta();
-  t.dil_phi = dil.phi();
-  t.dil_dR = deltaR(*dil.daughter(0), *dil.daughter(1));
-  t.dil_dPhi = fabs(deltaPhi(*dil.daughter(0), *dil.daughter(1)));
-  t.dil_dEta = fabs(dil.daughter(0)->eta() - dil.daughter(1)->eta());
-  // Only deal with dileptons composed of e,mu for now.
-  //assert(dil.numberOfDaughters() == 2);
-  //assert(abs(dil.daughter(0)->pdgId()) == 11 || abs(dil.daughter(0)->pdgId()) == 13);
-  //assert(abs(dil.daughter(1)->pdgId()) == 11 || abs(dil.daughter(1)->pdgId()) == 13);
-  //assert(abs(dil.daughter(0)->pdgId()) == 13);
-  //assert(abs(dil.daughter(1)->pdgId()) == 13);
+  t.dimu_mass = dil.mass();
+  t.dimu_pt = dil.pt();
+  t.dimu_eta = dil.eta();
+  t.dimu_phi = dil.phi();
+  t.dimu_dR = deltaR(*dil.daughter(0), *dil.daughter(1));
+  t.dimu_dPhi = fabs(deltaPhi(*dil.daughter(0), *dil.daughter(1)));
+  t.dimu_dEta = fabs(dil.daughter(0)->eta() - dil.daughter(1)->eta());
+
   // set opp_sign and diff_flavor
   const bool opp_sign = dil.daughter(0)->charge() + dil.daughter(1)->charge() == 0;
-  if((!opp_sign)||(dil.numberOfDaughters() != 2)||(fabs(dil.daughter(0)->pdgId()) != 13)||(fabs(dil.daughter(1)->pdgId()) != 13)){dil_flag = false;}
-  // const bool diff_flavor = abs(dil.daughter(0)->pdgId()) != abs(dil.daughter(1)->pdgId());
-  //const bool dimuon = abs(dil.daughter(0)->pdgId()) == 13 && abs(dil.daughter(1)->pdgId()) == 13;
+  if((!opp_sign)||(dil.numberOfDaughters() != 2)||(fabs(dil.daughter(0)->pdgId()) != 13)||(fabs(dil.daughter(1)->pdgId()) != 13)){dimu_flag = false;}
   
+
   // 
   // Put additional event info here
   // MET, Jets, etc.
@@ -472,7 +425,7 @@ void HiggsToMuMu::analyze(const edm::Event& event, const edm::EventSetup&) {
   t.jj2_mass = jj2_mass;
   t.jj2_dEta = jj2_dEta;
 
-  if(dil_flag){
+  if(dimu_flag){
     tree->Fill();
   }
   
