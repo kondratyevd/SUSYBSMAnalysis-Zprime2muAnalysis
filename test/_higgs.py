@@ -199,7 +199,7 @@ config.General.requestName = 'ana_datamc_%(name)s'
 config.General.workArea = 'crab'
 #config.General.transferLogs = True
 config.JobType.pluginName = 'Analysis'
-config.JobType.psetName = 'histos_crab.py'   
+config.JobType.psetName = 'higgs_crab.py'   
 #config.JobType.priority = 1
 config.Data.inputDataset =  '%(ana_dataset)s'
 config.Data.inputDBS = 'global'
@@ -255,9 +255,9 @@ config.Site.storageSite = 'T2_RU_JINR'
             name = '%s_%s' % (lumi_name, dataset_name)
             print name
 
-            new_py = open('histos.py').read()
+            new_py = open('higgs.py').read()
             new_py += "\nfor_data(process)\n"
-            open('histos_crab.py', 'wt').write(new_py)
+            open('higgs_crab.py', 'wt').write(new_py)
 
             new_crab_cfg = crab_cfg % locals()
 
@@ -275,7 +275,7 @@ config.Data.lumiMask = '%(lumi_mask)s' #######
             if not just_testing:
                 os.system('crab submit -c crabConfig.py')
             else:
-                cmd = 'diff histos.py histos_crab.py | less'
+                cmd = 'diff higgs.py higgs_crab.py | less'
                 print cmd
                 os.system(cmd)
                 cmd = 'less crab.py'
@@ -284,7 +284,7 @@ config.Data.lumiMask = '%(lumi_mask)s' #######
 
         if not just_testing:
             #os.system('rm crabConfig.py histos_crab.py histos_crab.pyc')
-            os.system('rm crabConfig.py histos_crab.py histos_crab.pyc tmp.json')
+            os.system('rm crabConfig.py higgs_crab.py higgs_crab.pyc tmp.json')
 
     if 'no_mc' not in sys.argv:
         # Set crab_cfg for MC.
@@ -299,15 +299,15 @@ config.Data.unitsPerJob  = 1000000
         for name, ana_dataset in samples:
             print name
 
-            new_py = open('histos.py').read()
+            new_py = open('higgs.py').read()
             
-            open('histos_crab.py', 'wt').write(new_py)
+            open('higgs_crab.py', 'wt').write(new_py)
 
             open('crabConfig.py', 'wt').write(crab_cfg % locals())
             if not just_testing:
                 os.system('crab submit -c crabConfig.py')
             else:
-                cmd = 'diff histos.py histos_crab.py | less'
+                cmd = 'diff higgs.py higgs_crab.py | less'
                 print cmd
                 os.system(cmd)
                 cmd = 'less crabConfig.py'
@@ -315,5 +315,5 @@ config.Data.unitsPerJob  = 1000000
                 os.system(cmd)
 
         if not just_testing:
-		os.system('rm crabConfig.py histos_crab.py histos_crab.pyc')
+		os.system('rm crabConfig.py higgs_crab.py higgs_crab.pyc')
 
