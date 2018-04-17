@@ -40,7 +40,7 @@ cut_name = 'Simple'
 Selection = OurSelectionDec2012
 
 
-	# Keep track of modules to put in the path for this set of cuts.
+# Keep track of modules to put in the path for this set of cuts.
 path_list = []
 path_list.append(process.egmGsfElectronIDSequence)
 	    
@@ -109,14 +109,14 @@ def ntuplify(process, fill_gen_info=True):
                                            dimu_src = cms.InputTag('SimpleMuonsAllSigns'),
 						met_src = cms.InputTag("slimmedMETs"),
 						jet_src = cms.InputTag("slimmedJets"),
-                                           beamspot_src = cms.InputTag('offlineBeamSpot'),
+#                                           beamspot_src = cms.InputTag('offlineBeamSpot'),
                                            vertices_src = cms.InputTag('offlineSlimmedPrimaryVertices'),
-								TriggerResults_src = cms.InputTag('TriggerResults', '', 'PAT'),	#mc
+#								TriggerResults_src = cms.InputTag('TriggerResults', '', 'PAT'),	#mc
 # 								TriggerResults_src = cms.InputTag('TriggerResults', '', 'RECO'),	#data
-                                           genEventInfo = cms.untracked.InputTag('generator'),
-                                           metFilter = cms.VInputTag( cms.InputTag("Flag_HBHENoiseFilter"), cms.InputTag("Flag_HBHENoiseIsoFilter"), 
-                                                                      cms.InputTag("Flag_EcalDeadCellTriggerPrimitiveFilter"), cms.InputTag("Flag_eeBadScFilter"), 
-                                                                      cms.InputTag("Flag_globalTightHalo2016Filter"))
+#                                           genEventInfo = cms.untracked.InputTag('generator'),
+#                                           metFilter = cms.VInputTag( cms.InputTag("Flag_HBHENoiseFilter"), cms.InputTag("Flag_HBHENoiseIsoFilter"), 
+#                                                                      cms.InputTag("Flag_EcalDeadCellTriggerPrimitiveFilter"), cms.InputTag("Flag_eeBadScFilter"), 
+#                                                                      cms.InputTag("Flag_globalTightHalo2016Filter"))
                                            )        
     if hasattr(process, 'pathSimple'):
 	if miniAOD and fill_gen_info:
