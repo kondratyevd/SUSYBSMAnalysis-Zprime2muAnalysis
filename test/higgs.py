@@ -207,7 +207,7 @@ job_control
 config.Data.publication = False
 config.Data.outputDatasetTag = 'ana_datamc_%(name)s'
 config.Data.outLFNDirBase = '/store/user/dkondrat'
-#config.Data.ignoreLocality = True 
+config.Data.ignoreLocality = True 
 config.Site.whitelist = ['T2_US_Purdue']
 config.Site.storageSite = 'T2_US_Purdue'
 '''
