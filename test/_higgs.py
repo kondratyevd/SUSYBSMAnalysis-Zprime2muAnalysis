@@ -21,8 +21,8 @@ process.GlobalTag.globaltag = '80X_mcRun2_asymptotic_2016_miniAODv2_v1' # for MC
 process.MessageLogger.cerr.FwkReport.reportEvery = 1000 # default 1000
 
 from SUSYBSMAnalysis.Zprime2muAnalysis.hltTriggerMatch_cfi import trigger_match, prescaled_trigger_match, trigger_paths, prescaled_trigger_paths, overall_prescale, offline_pt_threshold, prescaled_offline_pt_threshold
-from SUSYBSMAnalysis.Zprime2muAnalysis.Zprime2muAnalysis_cff import electrons_miniAOD
-electrons_miniAOD(process)
+#from SUSYBSMAnalysis.Zprime2muAnalysis.Zprime2muAnalysis_cff import electrons_miniAOD
+#electrons_miniAOD(process)
 
 import SUSYBSMAnalysis.Zprime2muAnalysis.OurSelectionNew_cff as OurSelectionNew
 import SUSYBSMAnalysis.Zprime2muAnalysis.OurSelectionDec2012_cff as OurSelectionDec2012
@@ -42,7 +42,7 @@ Selection = OurSelectionDec2012
 
 # Keep track of modules to put in the path for this set of cuts.
 path_list = []
-path_list.append(process.egmGsfElectronIDSequence)
+#path_list.append(process.egmGsfElectronIDSequence)
 	    
 leptons_name = cut_name + 'Leptons'
 #    if cut_name == 'Simple':
@@ -109,14 +109,7 @@ def ntuplify(process, fill_gen_info=True):
                                            dimu_src = cms.InputTag('SimpleMuonsAllSigns'),
 						met_src = cms.InputTag("slimmedMETs"),
 						jet_src = cms.InputTag("slimmedJets"),
-#                                           beamspot_src = cms.InputTag('offlineBeamSpot'),
-                                           vertices_src = cms.InputTag('offlineSlimmedPrimaryVertices'),
-#								TriggerResults_src = cms.InputTag('TriggerResults', '', 'PAT'),	#mc
-# 								TriggerResults_src = cms.InputTag('TriggerResults', '', 'RECO'),	#data
-#                                           genEventInfo = cms.untracked.InputTag('generator'),
-#                                           metFilter = cms.VInputTag( cms.InputTag("Flag_HBHENoiseFilter"), cms.InputTag("Flag_HBHENoiseIsoFilter"), 
-#                                                                      cms.InputTag("Flag_EcalDeadCellTriggerPrimitiveFilter"), cms.InputTag("Flag_eeBadScFilter"), 
-#                                                                      cms.InputTag("Flag_globalTightHalo2016Filter"))
+                                           vertices_src = cms.InputTag('offlineSlimmedPrimaryVertices')
                                            )        
     if hasattr(process, 'pathSimple'):
 	if miniAOD and fill_gen_info:
