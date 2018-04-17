@@ -72,12 +72,12 @@ for dil_name, dil_decay, dil_cut in dils:
     dil.max_candidates = 100
     dil.sort_by_pt = True
     dil.do_remove_overlap = False
-    if hasattr(dil, 'back_to_back_cos_angle_min'):
-        delattr(dil, 'back_to_back_cos_angle_min')
-    if hasattr(dil, 'vertex_chi2_max'):
-        delattr(dil, 'vertex_chi2_max')
-    if hasattr(dil, 'dpt_over_pt_max'):
-        delattr(dil, 'dpt_over_pt_max')
+#    if hasattr(dil, 'back_to_back_cos_angle_min'):
+#        delattr(dil, 'back_to_back_cos_angle_min')
+#    if hasattr(dil, 'vertex_chi2_max'):
+#        delattr(dil, 'vertex_chi2_max')
+#    if hasattr(dil, 'dpt_over_pt_max'):
+#        delattr(dil, 'dpt_over_pt_max')
  #      
         # Add all these modules to the process and the path list.
     setattr(process, allname, alldil)
@@ -94,9 +94,7 @@ for dil_name, dil_decay, dil_cut in dils:
     # Finally, make the path for this set of cuts.
     pathname = 'path' + cut_name
     process.load('SUSYBSMAnalysis.Zprime2muAnalysis.DileptonPreselector_cfi')
-  #  process.load("SUSYBSMAnalysis.Zprime2muAnalysis.EventCounter_cfi")
-    pobj = process.dileptonPreseletor# * reduce(lambda x,y: x*y, path_list)
-    #pobj = process.dileptonPreseletor *  process.muonPhotonMatchMiniAOD * reduce(lambda x,y: x*y, path_list)
+    pobj = process.dileptonPreseletor * reduce(lambda x,y: x*y, path_list)
  
     path = cms.Path(pobj)
     setattr(process, pathname, path)
