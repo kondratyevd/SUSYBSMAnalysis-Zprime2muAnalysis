@@ -23,9 +23,6 @@ process.MessageLogger.cerr.FwkReport.reportEvery = 1000 # default 1000
 from SUSYBSMAnalysis.Zprime2muAnalysis.hltTriggerMatch_cfi import trigger_match, prescaled_trigger_match, trigger_paths, prescaled_trigger_paths, overall_prescale, offline_pt_threshold, prescaled_offline_pt_threshold
 from SUSYBSMAnalysis.Zprime2muAnalysis.Zprime2muAnalysis_cff import electrons_miniAOD
 electrons_miniAOD(process)
-#from SUSYBSMAnalysis.Zprime2muAnalysis.HistosFromPAT_cfi import HistosFromPAT_MiniAOD as HistosFromPAT
-#HistosFromPAT.leptonsFromDileptons = True
-#HistosFromPAT.usekFactor = False #### Set TRUE to use K Factor on DY. If used, the k factor will be applied to ALL samples submitted. #####
 
 import SUSYBSMAnalysis.Zprime2muAnalysis.OurSelectionNew_cff as OurSelectionNew
 import SUSYBSMAnalysis.Zprime2muAnalysis.OurSelectionDec2012_cff as OurSelectionDec2012
@@ -42,7 +39,7 @@ dils = [('MuonsPlusMuonsMinus',          '%(leptons_name)s:muons@+ %(leptons_nam
 cut_name = 'Simple'
 Selection = OurSelectionDec2012
 
-#for cut_name, Selection in cuts.iteritems():
+
 	# Keep track of modules to put in the path for this set of cuts.
 path_list = []
 path_list.append(process.egmGsfElectronIDSequence)
@@ -87,8 +84,7 @@ for dil_name, dil_decay, dil_cut in dils:
         # Add all these modules to the process and the path list.
     setattr(process, allname, alldil)
     setattr(process, name, dil)
- #   setattr(process, name + 'Histos', histos)
-    path_list.append(alldil * dil)# * histos)
+    path_list.append(alldil * dil)
 
 
        #define the list of MC samples to be read here. be careful that if WWinclusive or tautau sample are not commented it will apply the filters when running locally.
@@ -101,7 +97,8 @@ for dil_name, dil_decay, dil_cut in dils:
     pathname = 'path' + cut_name
     process.load('SUSYBSMAnalysis.Zprime2muAnalysis.DileptonPreselector_cfi')
     process.load("SUSYBSMAnalysis.Zprime2muAnalysis.EventCounter_cfi")
-    pobj = process.EventCounter * process.dileptonPreseletor *  process.muonPhotonMatchMiniAOD * reduce(lambda x,y: x*y, path_list)
+    pobj = process.dileptonPreseletor *  process.muonPhotonMatchMiniAOD * reduce(lambda x,y: x*y, path_list)
+    #pobj = process.EventCounter * process.dileptonPreseletor *  process.muonPhotonMatchMiniAOD * reduce(lambda x,y: x*y, path_list)
 
     path = cms.Path(pobj)
     setattr(process, pathname, path)
