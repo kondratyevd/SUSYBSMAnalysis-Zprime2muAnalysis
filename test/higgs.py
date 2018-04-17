@@ -208,8 +208,8 @@ config.Data.publication = False
 config.Data.outputDatasetTag = 'ana_datamc_%(name)s'
 config.Data.outLFNDirBase = '/store/user/dkondrat'
 #config.Data.ignoreLocality = True 
-#config.Site.whitelist = ["T2_IT_Bari"]
-config.Site.storageSite = 'T2_RU_JINR'
+config.Site.whitelist = ['T2_US_Purdue']
+config.Site.storageSite = 'T2_US_Purdue'
 '''
     
     just_testing = 'testing' in sys.argv
@@ -289,10 +289,10 @@ config.Data.lumiMask = '%(lumi_mask)s' #######
     if 'no_mc' not in sys.argv:
         # Set crab_cfg for MC.
         crab_cfg = crab_cfg.replace('job_control','''
-config.Data.splitting = 'EventAwareLumiBased'
-#config.Data.splitting = 'FileBased'
+#config.Data.splitting = 'EventAwareLumiBased'
+config.Data.splitting = 'FileBased'
 config.Data.totalUnits = -1
-config.Data.unitsPerJob  = 1000000
+config.Data.unitsPerJob  = 1
     ''')
 
        
