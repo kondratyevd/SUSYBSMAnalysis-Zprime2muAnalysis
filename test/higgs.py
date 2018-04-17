@@ -290,7 +290,8 @@ config.Data.lumiMask = '%(lumi_mask)s' #######
         # Set crab_cfg for MC.
         crab_cfg = crab_cfg.replace('job_control','''
 #config.Data.splitting = 'EventAwareLumiBased'
-config.Data.splitting = 'FileBased'
+#config.Data.splitting = 'FileBased'
+config.Data.splitting = 'Automatic'
 config.Data.totalUnits = -1
 config.Data.unitsPerJob  = 1
     ''')
