@@ -82,7 +82,8 @@ for dil_name, dil_decay, dil_cut in dils:
         # Add all these modules to the process and the path list.
     setattr(process, allname, alldil)
     setattr(process, name, dil)
-    path_list.append(alldil * dil)
+    path_list.append(dil)
+    #path_list.append(alldil * dil)
 
 
        #define the list of MC samples to be read here. be careful that if WWinclusive or tautau sample are not commented it will apply the filters when running locally.
