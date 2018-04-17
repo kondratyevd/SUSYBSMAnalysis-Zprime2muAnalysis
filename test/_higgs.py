@@ -72,13 +72,13 @@ for dil_name, dil_decay, dil_cut in dils:
     dil.max_candidates = 100
     dil.sort_by_pt = True
     dil.do_remove_overlap = False
-#    if hasattr(dil, 'back_to_back_cos_angle_min'):
-#        delattr(dil, 'back_to_back_cos_angle_min')
-#    if hasattr(dil, 'vertex_chi2_max'):
-#        delattr(dil, 'vertex_chi2_max')
-#    if hasattr(dil, 'dpt_over_pt_max'):
-#        delattr(dil, 'dpt_over_pt_max')
- #      
+    if hasattr(dil, 'back_to_back_cos_angle_min'):
+        delattr(dil, 'back_to_back_cos_angle_min')
+    if hasattr(dil, 'vertex_chi2_max'):
+        delattr(dil, 'vertex_chi2_max')
+    if hasattr(dil, 'dpt_over_pt_max'):
+        delattr(dil, 'dpt_over_pt_max')
+       
         # Add all these modules to the process and the path list.
     setattr(process, allname, alldil)
     setattr(process, name, dil)
